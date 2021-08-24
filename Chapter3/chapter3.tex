@@ -12,14 +12,48 @@
 \fi
 Quando si incarica un bus di percorrere l'arco $ij$ il bus si ferma a prelevare studenti in $i$ e $j$. Se le strade si $i,j$ fossero un sottoinsieme delle strade di un altro arco $k,l$ e si volesse far fermare il bus in $k,l$ e non in $i,j$ allora l'arco $i,j$ non risulta assegnato al bus.
 \section{Analisi del problema}
-Nessun nodo $i$ corrispondente a una fermata di un bus (ossia appartenente a $A$) è un nodo di inizio o di termine di una corsa del bus: il numero di bus che arriva in $i$ dopo aver visitato un nodo adiacente è pari al numero di bus che visitano un arco adiacente subito dopo aver visitato $i$:
 
-Il suddetto numero di bus che entra in (o esce da) $i$ è pari a 1 se se solo se il bus si ferma in $i,j$, altrimenti è pari a 0.
-
-
-Ogni studente deve essere prelevato una e una sola volta volta, in una e una sola fermata.
-
-Nessuno studente viene prelevato solo
 
 \section{Vincoli}
+Nessun nodo $i$ corrispondente a una fermata di un bus (ossia appartenente a $A$) è un nodo di inizio o di termine di una corsa del bus: il numero di bus che arriva in $i$ dopo aver visitato un nodo adiacente è pari al numero di bus che visitano un arco adiacente subito dopo aver visitato $i$:
+\begin{equation}
+    \sum_{j \in L} x_{kij} = \sum_{j \in L} x_{kji},\quad \forall k \in B,\;\forall i \in L
+\end{equation}
+Il suddetto numero di bus che arriva in (o parte da) $i$ è pari a 1 se e solo se il bus si ferma in $i,j$, altrimenti è pari a 0.
+\begin{equation}
+    \sum_{j \in L} x_{kij} = y_{ik},\quad \forall i \in L,\; \forall k \in B 
+\end{equation}
+Ogni studente deve essere prelevato una e una sola volta volta, in una e una sola fermata.
+\begin{equation}
+    \sum_{k \in B}\sum_{i \in L} z_{ski} = 1,\quad \forall s \in S
+\end{equation}
+Uno studente può prendere un bus $k$ nella fermata $i$ solo se il bus $k$ si ferma in $i$.
+\begin{equation}
+    z_{ski} \leq y_{ik},\quad \forall s \in S,\;\forall k \in B,\;\forall i \in F
+\end{equation}
+Se uno studente non è disposto a prendere il bus nella fermata $i$ allora non deve essere prelevato in $i$.
+\begin{equation}
+    \sum_{k \in B} z_{ski} \leq FSMatrix_{is},\quad \forall s \in S,\;\forall i \in F
+\end{equation}
+Per ogni bus l'occupazione massima non può essere superiore al numero di posti disponibili. Poiché una volta raggiunta la scuola un bus non può più caricare studenti, la sua \textit{occupazione massima} è pari al numero di studenti presenti nel bus al momento dell'arrivo a scuola, ovvero alla somma di tutti gli studenti caricati nel bus in tutte le fermate visitate. 
+
+
+Nessun bus arriva in un deposito, né rimane fermo nella stessa locazione, né visita altre fermate per prelevare studenti \footnote{Ma potrebbe visitare altre scuole, qualora ve ne fossero}.
+
+Un bus visita una fermata se e solo se non rimane fermo al deposito.
+
+Ogni fermata viene visitata al più una volta.
+
+UN bus parte da un deposito, dunque non percorre archi adiacenti a un deposito non suo.
+
+Le variabili $x_{kij}$, $y_{ik}$, $z_{ski}$ sono binarie per ogni valore che possono assumere $i$, $j$, $k$, $s$.
+\begin{equation}
+    x_{kij} \in \{0,1\},\quad \forall i \in L,\;\forall j \in L,\;\forall k \in B
+\end{equation}
+\begin{equation}
+    y_{ik} \in \{0,1\},\quad \forall i \in L,\;\forall k \in B
+\end{equation}
+\begin{equation}
+    z_{ski} \in \{0,1\},\quad \forall s \in S,\;\forall k \in B,\;\forall i \in F
+\end{equation}
 
