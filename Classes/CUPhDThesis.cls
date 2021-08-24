@@ -475,6 +475,7 @@ supported!}
 \else
   % default: pdfLaTeX
   \RequirePackage[utf8]{inputenc}
+  \RequirePackage[italian]{babel}
   \RequirePackage[T1]{fontenc}
   
   % If building with PDFLaTeX, use microtype spacing adjustments
@@ -1048,7 +1049,7 @@ wish to left align your text}
 \newsavebox{\PHD@author}
 \begin{lrbox}{\PHD@author}
   \begin{minipage}[c]{\textwidth}
-    \centering \Large \bfseries{by} \par
+    \centering \Large \bfseries{a cura di} \par
         \vspace{0.5em}
     \centering \LARGE \bfseries{\@author}
         \vspace{0.5em}
