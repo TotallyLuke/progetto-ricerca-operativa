@@ -36,16 +36,25 @@ Se uno studente non è disposto a prendere il bus nella fermata $i$ allora non d
     \sum_{k \in B} z_{ski} \leq FSMatrix_{is},\quad \forall s \in S,\;\forall i \in F
 \end{equation}
 Per ogni bus l'occupazione massima non può essere superiore al numero di posti disponibili. Poiché una volta raggiunta la scuola un bus non può più caricare studenti, la sua \textit{occupazione massima} è pari al numero di studenti presenti nel bus al momento dell'arrivo a scuola, ovvero alla somma di tutti gli studenti caricati nel bus in tutte le fermate visitate. 
-
-
+\begin{equation}
+    \sum_{s \in S}\sum_{i \in F}z_{ski} \leq C_{k},\quad \forall k \in B
+\end{equation}
 Nessun bus arriva in un deposito, né rimane fermo nella stessa locazione, né visita altre fermate per prelevare studenti \footnote{Ma potrebbe visitare altre scuole, qualora ve ne fossero}.
-
-Un bus visita una fermata se e solo se non rimane fermo al deposito.
-
+\begin{equation}
+    \sum_{k \in B}\sum_{i \in L}(x_{kii} + \sum_{i \in D}x_{kij}) + \sum_{k \in B}\sum_{j \in I}\;\sum_{i \in F \cup D}x_{kij} = 0
+\end{equation}
+Se una fermata viene visitata dal bus $k$ allora il bus non è rimasto fermo al deposito.
+\begin{equation}
+    \sum_{i \in F \cup D}x_{kij} \leq \sum_{i \in D}\sum_{l \in A}x_{kil}, \quad \forall b \in B,\;\forall j \in F
+\end{equation}
 Ogni fermata viene visitata al più una volta.
-
-UN bus parte da un deposito, dunque non percorre archi adiacenti a un deposito non suo.
-
+\begin{equation}
+    \sum_{b \in B}y_{ki} \leq 1, \quad \forall i \in L
+\end{equation}
+Un bus parte dal proprio deposito, dunque non percorre archi adiacenti a un deposito non suo.
+\begin{equation}
+    \sum_{j \in L}x_{kij} \leq b_{ik}, \quad \forall k \in B,\;\forall i \in L
+\end{equation}
 Le variabili $x_{kij}$, $y_{ik}$, $z_{ski}$ sono binarie per ogni valore che possono assumere $i$, $j$, $k$, $s$.
 \begin{equation}
     x_{kij} \in \{0,1\},\quad \forall i \in L,\;\forall j \in L,\;\forall k \in B
