@@ -10,22 +10,98 @@
 \else
     \graphicspath{{Chapter3/Figs/Vector/}{Chapter3/Figs/}}
 \fi
-Quando si incarica un bus di percorrere l'arco $ij$ il bus si ferma a prelevare studenti in $i$ e $j$. Se le strade si $i,j$ fossero un sottoinsieme delle strade di un altro arco $k,l$ e si volesse far fermare il bus in $k,l$ e non in $i,j$ allora l'arco $i,j$ non risulta assegnato al bus.
-\section{Analisi del problema}
+\section{Elementi del modello}
+Di seguito vengono presentati gli insiemi, i parametri e le variabili individuate per la successiva formulazione della funzione obiettivo e dei vincoli.
+\subsection{Insiemi}
+Nel testo sono stati individuati i seguenti insiemi, nei quali spazia il dominio delle variabili definite in §\ref{subsec:var}:
+\begin{itemize}
+  \item $S = \{1,\, 2,\, \ldots,\, 18\}$ : studenti afferenti al servizio scuolabus;%TODO modify
+  \item $F = \{1,\, 2,\, 3,\, 4\}$ : insieme dei 4 punti di raccolta in cui poter prelevare studenti;
+  \item $D = \{5,\, 6\}$ : insieme dei 2 depositi per scuolabus;
+  \item $I = \{7\}$ : insieme delle scuole presenti (nel problema ve ne è una sola);
+  \item $B = \{1,\,2\}$ : flotta degli scuolabus.
+\end{itemize}
+Per convenienza definiamo anche $L = F \cup D \cup I$.
+
+\subsection{Parametri}
+
+I costi variabili di una soluzione vengono calcolati sulla base delle distanze e dei tempi di percorrenza tra archi di un grafo completo. I seguenti parametri modellano la matrici delle distanze e dei tempi:
+\begin{itemize}
+  \item $distMatr_{ij}$ con $i,j \in L$: matrice delle distanze in chilometri tra i nodi del grafo delle fermate in $L$;
+  \item $timeMatr_{ij}$ con $i,j \in L$: matrice dei tempi di percorrenza medi in minuti tra i nodi del grafo delle fermate in $L$;
+\end{itemize}
+L'assegnazione di studenti alle fermate e ai bus deve considerare anche le disponibilità degli studenti riguardo alle fermate e le capacità dei bus. Inoltre un bus non visita una fermata se in questa non preleva un numero minimo di studenti:
+\begin{itemize}
+\item $FeStMatr_{is}$ con $s \in S$ e $i \in F$: matrice che indica per ogni studente le fermate nelle quali è disponibile a prendere il bus;
+\item $C_k$ con $k \in B$: capacità effettiva di ogni bus, in posti a sedere;
+\item $minS$ : numero minimo di studenti che un bus preleva in una fermata.
+\end{itemize}
+Ogni bus deve essere assegnato al proprio deposito:
+\begin{itemize}
+  \item $b_{ik}$ con $i \in D$ e $k \in B$: il bus $k$ parte dal deposito $i$;
+\end{itemize}
+L'orario in cui suona la campanella determina la durata massima di una corsa del bus:
+\begin{itemize}
+  \item $t$ : minuti compresi tra le ore 7:00 e l'orario di inizio delle lezioni, diviso 5 (es. se le lezioni iniziano alle 7:50 si ha $t = 0$).
+\end{itemize}
+
+
+\subsection{Variabili}
+\label{subsec:var}
+Un'assegnazione alle seguenti variabili che rispetta i vincoli imposti in §\ref{sec:constraints} rappresenta una candidata soluzione al problema:
+\begin{itemize}
+\item $x_{k,i,j}$ con $k \in B$, $i,j \in L$: indica se il bus $k$ deve percorrere il tragitto che collega $i$ e $j$;
+\item $y_{i,k}$ con $i \in L$, $k \in B$: indica se il bus $k$ si deve fermare in $i$;
+\item $z_{s,k,i}$ con $i \in L$, $k \in B$: indica se il bus $k$ deve prelevare lo studente $s$ nella fermata $i$.
+\end{itemize}
+
+
+\section{Funzione obiettivo}
+Il problema richiede di individuare una soluzione di costo minimo su base semestrale (si supponga per semplicità che un semestre contenga 120 giorni lavorativi). I costi presenti nel testo del problema si suddividono in:
+\begin{itemize}
+  \item \textbf{costi variabili \textit{dipendenti dalla distanza}}, che consistono nella somma tra quota manutenzione (€0,10 al km) e quota carburante (€0,20 al km) moltiplicati per il numero di km percorsi al semestre (considerando 2 tratte al giorno per 120 giorni, per ogni bus):
+\begin{equation}
+  \label{eq:vardist}
+  (0.1 + 0.2) * 2 * 120\sum_{k \in B}\sum_{i \in L}\sum_{j \in L}\Big(distMatr_{ij} * x_{kij}\Big)
+\end{equation}
+  \item \textbf{costi variabili \textit{dipendenti dal tempo impiegato}}, che sono pari alla paga al minuto per autista moltiplicata per il numero di minuti maturate per semestre (considerando 2 tratte al giorno per 120 giorni, per ogni bus):
+\begin{equation}
+  \label{eq:vartime}
+  \frac{30}{60} * 2 * 120\Bigg(\sum_{k \in B}\sum_{i \in L}\sum_{j \in L}\Big(timeMatr_{ij} * x_{kij}\Big) + 2\Big(\sum_{k \in B}\sum_{i \in L}\sum_{j \in L} x_{kij} -2\Big) \Bigg)
+\end{equation}
+\item \textbf{costi fissi per autobus \textit{impiegato}}, che ammontano alla somma tra i costi semestrali di assicurazione e bollo (€3200), la somma dei costi giornalieri per l'utilizzo esclusivamente notturno del deposito (€15, per 120 giorni lavorativi):
+\begin{equation}
+  \label{eq:fixedused}
+  (15 * 120 + 3200) \sum_{i \in D}\sum_{j \in L} x_{ij}
+\end{equation}
+\item \textbf{costi fissi per autobus \textit{non impiegato}}, che sono pari al numero di giorni lavorativi (120) moltiplicato per il costo dell'utilizzo diurno del deposito (€25) moltiplicato per il numero di bus inutilizzati:
+\begin{equation}
+  \label{eq:fixedunused}
+    25 * 120 \Big(|B| - \sum_{i \in D}\sum_{j \in L} x_{ij}\Big)
+  \end{equation}
+\end{itemize}
+La funzione obiettivo è data da (\ref{eq:vardist}) + (\ref{eq:vartime}) + (\ref{eq:fixedused}) + (\ref{eq:fixedunused}).
+
 
 
 \section{Vincoli}
-Nessun nodo $i$ corrispondente a una fermata di un bus (ossia appartenente a $A$) è un nodo di inizio o di termine di una corsa del bus: il numero di bus che arriva in $i$ dopo aver visitato un nodo adiacente è pari al numero di bus che visitano un arco adiacente subito dopo aver visitato $i$:
+\label{sec:constraints}
+%Ogni fermata viene visitata al più una volta.
+%\begin{equation}
+%    \label{eq:maxVisitStop}
+%    \sum_{k \in B}y_{ik} \leq 1, \quad \forall i \in L
+%\end{equation}
+Un nodo $i$ corrispondente a un punto di raccolta studenti (ossia appartenente a $F$) è un nodo \textit{di transito}, nel quale non può iniziare o terminare una corsa di bus: il numero di bus che arriva in $i$ dopo aver visitato un nodo adiacente deve essere uguale al numero di bus che visitano un arco adiacente subito dopo aver visitato $i$:
 \begin{equation}
     \sum_{j \in L} x_{kij} = \sum_{j \in L} x_{kji},\quad \forall k \in B,\;\forall i \in L
 \end{equation}
-Il suddetto numero di bus che arriva in (o parte da) $i$ è pari a 1 se e solo se il bus si ferma in $i,j$, altrimenti è pari a 0.
+Il suddetto numero di bus che arriva in (o parte da) $i$ è pari a 1 se e solo se il bus ai ferma in $i$, altrimenti è pari a 0.
 \begin{equation}
     \sum_{j \in L} x_{kij} = y_{ik},\quad \forall i \in L,\; \forall k \in B 
 \end{equation}
-Ogni studente deve essere prelevato una e una sola volta volta, in una e una sola fermata.
+Ogni studente deve essere prelevato una sola volta, in una sola fermata.
 \begin{equation}
-    \sum_{k \in B}\sum_{i \in L} z_{ski} = 1,\quad \forall s \in S
+    \sum_{k \in B}\sum_{i \in F} z_{ski} = 1,\quad \forall s \in S
 \end{equation}
 Uno studente può prendere un bus $k$ nella fermata $i$ solo se il bus $k$ si ferma in $i$.
 \begin{equation}
@@ -33,28 +109,34 @@ Uno studente può prendere un bus $k$ nella fermata $i$ solo se il bus $k$ si fe
 \end{equation}
 Se uno studente non è disposto a prendere il bus nella fermata $i$ allora non deve essere prelevato in $i$.
 \begin{equation}
-    \sum_{k \in B} z_{ski} \leq FSMatrix_{is},\quad \forall s \in S,\;\forall i \in F
+    \sum_{k \in B} z_{ski} \leq FeStMatr_{is},\quad \forall i \in F,\;\forall s \in S
 \end{equation}
 Per ogni bus l'occupazione massima non può essere superiore al numero di posti disponibili. Poiché una volta raggiunta la scuola un bus non può più caricare studenti, la sua \textit{occupazione massima} è pari al numero di studenti presenti nel bus al momento dell'arrivo a scuola, ovvero alla somma di tutti gli studenti caricati nel bus in tutte le fermate visitate. 
 \begin{equation}
     \sum_{s \in S}\sum_{i \in F}z_{ski} \leq C_{k},\quad \forall k \in B
 \end{equation}
-Nessun bus arriva in un deposito, né rimane fermo nella stessa locazione, né visita altre fermate per prelevare studenti \footnote{Ma potrebbe visitare altre scuole, qualora ve ne fossero}.
+Nessun bus arriva in un deposito, né rimane fermo nella stessa locazione, né visita altre fermate per prelevare studenti dopo essere giunto a una scuola. \footnote{Ma potrebbe visitare altre scuole, qualora ve ne fossero.}
 \begin{equation}
-    \sum_{k \in B}\sum_{i \in L}(x_{kii} + \sum_{i \in D}x_{kij}) + \sum_{k \in B}\sum_{j \in I}\;\sum_{i \in F \cup D}x_{kij} = 0
+  \label{eq:forbiddenMovements}
+    \sum_{k \in B}\sum_{i \in L}(x_{kii} + \sum_{j \in D}x_{kij}) + \sum_{k \in B}\sum_{l \in I}\;\sum_{m \in F \cup D}x_{klm} = 0
 \end{equation}
 Se una fermata viene visitata dal bus $k$ allora il bus non è rimasto fermo al deposito.
 \begin{equation}
-    \sum_{i \in F \cup D}x_{kij} \leq \sum_{i \in D}\sum_{l \in A}x_{kil}, \quad \forall b \in B,\;\forall j \in F
-\end{equation}
-Ogni fermata viene visitata al più una volta.
-\begin{equation}
-    \sum_{b \in B}y_{ki} \leq 1, \quad \forall i \in L
+    \sum_{i \in F \cup D}x_{kij} \leq \sum_{i \in D}\sum_{l \in F}x_{kil}, \quad \forall b \in B,\;\forall j \in F \cup I
 \end{equation}
 Un bus parte dal proprio deposito, dunque non percorre archi adiacenti a un deposito non suo.
 \begin{equation}
-    \sum_{j \in L}x_{kij} \leq b_{ik}, \quad \forall k \in B,\;\forall i \in L
+  \sum_{j \in L}x_{kij} \leq b_{ik}, \quad \forall k \in B,\;\forall i \in D
 \end{equation}
+Ogni bus deve completare la propria corsa entro il suono della campanella (considerando 2 minuti di stazionamento per ogni fermata, escluse la partenza e l'arrivo della corsa).
+\begin{equation}
+  \sum_{i \in L}\sum_{j \in L}\Big(timeMatr_{ij} * x_{kij}\Big) + 2\Big(\sum_{i \in L}\sum_{j \in L} x_{kij} -2\Big) \leq 5t, \quad \forall k \in B
+\end{equation}
+Un bus visita una fermata solo se può prelevare un numero minimo di studenti.
+\begin{equation}
+  \sum_{j \in F}y_{ik} \leq \frac{1}{minS}\sum_{s \in S}z_{ski}, \quad \forall i \in L
+\end{equation}
+
 Le variabili $x_{kij}$, $y_{ik}$, $z_{ski}$ sono binarie per ogni valore che possono assumere $i$, $j$, $k$, $s$.
 \begin{equation}
     x_{kij} \in \{0,1\},\quad \forall i \in L,\;\forall j \in L,\;\forall k \in B
@@ -65,4 +147,15 @@ Le variabili $x_{kij}$, $y_{ik}$, $z_{ski}$ sono binarie per ogni valore che pos
 \begin{equation}
     z_{ski} \in \{0,1\},\quad \forall s \in S,\;\forall k \in B,\;\forall i \in F
 \end{equation}
+
+\section{Studio della presenza di cicli}
+Il vincolo (\ref{eq:forbiddenMovements}) impedisce a un bus di arrivare in un deposito. Ciò implica che è impossibile che un percorso assegnato a un bus contenga un ciclo che interessi un deposito.
+
+La binarietà di $y$ implica che un punto di raccolta studenti possa essere attraversato al più una volta. In un ciclo almeno un nodo deve essere raggiutno due volte da un bus: dunque nel modello sopra formulato qualsiasi ciclo deve coinvolgere una scuola. Inoltre il vincolo (\ref{eq:forbiddenMovements}) impedisce che un bus prelevi altri studenti dopo avere raggiunto una scuola: quindi un ciclo può coinvolgere solo scuole.
+
+Benché nel testo del problema si parla di una sola scuola, si può evitare la formazione di cicli anche nel caso in cui il comune decida di aprire una nuova scuola (permettendo a un bus di raggiungere raggiungere solamente altre scuole dopo aver raggiunto una scuola) inserendo il vincolo:
+\begin{equation}
+  \sum_{j \in I} x_{kij} \leq \sum_{j \in I} x_{kji},\quad \forall k \in B,\;\forall i \in I
+\end{equation}
+che assicura che uno scuolabus transiti una sola volta in una scuola e parta solo da nodi in cui è arrivato, a meno che non abbia raggiunto il termine della corsa.
 
