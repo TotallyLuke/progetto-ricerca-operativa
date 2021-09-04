@@ -1,4 +1,4 @@
-\chapter{My fourth chapter}
+\chapter{Note e conclusioni}
 
 % **************************** Define Graphics Path **************************
 \ifpdf
@@ -7,144 +7,32 @@
     \graphicspath{{Chapter4/Figs/Vector/}{Chapter4/Figs/}}
 \fi
 
-\section{First section of the fourth chapter}
-And now I begin my fourth chapter here \dots
+\section{Note per l'esecuzione}
+\label{sec:note}
+Il documento è corredato da 5 files:
 
-And now to cite some more people~\citet{Rea85,Ancey1996}
+\begin{itemize}
+  \item \texttt{bus\_model.mod}, che contiene il modello del problema codificato in AMPL, opportunamente commentato;
+  \item \texttt{bus\_dat.dat}, che contiene i dati del problema come descritti in in §\ref{cha:descrizione};
+  \item \texttt{decide\_time.run}, eseguibile per verificare il costo minimo al variare del parametro \textit{t} nell'intervallo [6,21] (vale a dire che il suono della campanella varia tra le 7:30 e le 8:45, a scatti di 5 minuti);
+  \item \texttt{decide\_time.sa1}, script utile per implementare il ciclo necessario per lo script \texttt{decide\_time.run} al punto sopra; 
+  \item \texttt{display\_solution.run}, eseguibile per mostrare la soluzione ottima dato \textit{t =10}.
+\end{itemize}
 
-\subsection{First subsection in the first section}
-\dots and some more 
+Per eseguire \texttt{display\_solution.run} o \texttt{decide\_time.run} è sufficiente aprire AMPL da riga di comando e digitare il comando \texttt{include display\_solution.run} o \texttt{include decide\_time.run}. L'ordine con cui vengono eseguiti questi due comandi è ininfluente.
 
-\subsection{Second subsection in the first section}
-\dots and some more \dots
+\section{Conclusioni}
 
-\subsubsection{First subsub section in the second subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it \dots
+Il problema viene risolto con il metodo del branch and bound. Nella soluzione ottima vengono impiegati i bus $1$ (omologato per 18 posti) e $2$ (26 posti). Il costo minimo individuato ammonta a €$21680$ a semestre.
+Il percorso individuato per il bus n° 1 è $6-3-8$, quello individuato per il bus 2 è $7-5-2-8$, mentre il bus $3$ rimane fermo al deposito $6$.
+In particolare questa è l'assegnazione di studenti per fermata:
 
-\subsection{Third subsection in the first section}
-\dots and some more \dots
+\begin{itemize}
+\item fermata 2: studenti $10$, $11$, $13$, $14$, $15$ e $22$;
+\item fermata 3: studenti $1$, $4$, $5$, $6$, $7$, $8$, $9$, $18$ e $19$;
+\item fermata 5: studenti $2$, $3$, $12$, $16$, $17$, $20$ e $21$.
+\end{itemize}
 
-\subsubsection{First subsub section in the third subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it and some more and some more and
-some more and some more and some more and some more and some more \dots
+Anticipando l'orario di inizio lezioni alle 7:30 o 7:35 ($t=6$ o $t=7$) il costo minimo semestrale per il servizio trasporti corrisponde a €$25040$. Fissando l'orario di inizio in un orario compreso tra le 7:40 e le 8:45 è possibile soddisfare i vincoli spendendo €$21680$ a semestre.
 
-\subsubsection{Second subsub section in the third subsection}
-\dots and some more in the first subsub section otherwise it all looks the same
-doesn't it? well we can add some text to it \dots
 
-\section{Second section of the third chapter}
-and here I write more \dots
-
-\section{The layout of formal tables}
-This section has been modified from \emph{Publication quality tables in \LaTeX*}
- by Simon Fear.
-
-The layout of a table has been established over centuries of experience and 
-should only be altered in extraordinary circumstances. 
-
-When formatting a table, remember two simple guidelines at all times:
-
-\begin{enumerate}
-  \item Never, ever use vertical rules (lines).
-  \item Never use double rules.
-\end{enumerate}
-
-These guidelines may seem extreme but I have
-never found a good argument in favour of breaking them. For
-example, if you feel that the information in the left half of
-a table is so different from that on the right that it needs
-to be separated by a vertical line, then you should use two
-tables instead. Not everyone follows the second guideline:
-
-There are three further guidelines worth mentioning here as they
-are generally not known outside the circle of professional
-typesetters and subeditors:
-
-\begin{enumerate}\setcounter{enumi}{2}
-  \item Put the units in the column heading (not in the body of
-          the table).
-  \item Always precede a decimal point by a digit; thus 0.1
-      {\em not} just .1.
-  \item Do not use 'ditto' signs or any other such convention to
-      repeat a previous value. In many circumstances a blank
-      will serve just as well. If it won't, then repeat the value.
-\end{enumerate}
-
-A frequently seen mistake is to use `\textbackslash begin\{center\}' \dots `\textbackslash end\{center\}' inside a figure or table environment. This center environment can cause additional vertical space. If you want to avoid that just use `\textbackslash centering'
-
-\begin{table}
-\caption{A badly formatted table}
-\centering
-\label{table:bad_table}
-\begin{tabular}{|l|c|c|c|c|}
-\hline 
-& \multicolumn{2}{c}{Species I} & \multicolumn{2}{c|}{Species II} \\ 
-\hline
-Dental measurement  & mean & SD  & mean & SD  \\ \hline 
-\hline
-I1MD & 6.23 & 0.91 & 5.2  & 0.7  \\
-\hline 
-I1LL & 7.48 & 0.56 & 8.7  & 0.71 \\
-\hline 
-I2MD & 3.99 & 0.63 & 4.22 & 0.54 \\
-\hline 
-I2LL & 6.81 & 0.02 & 6.66 & 0.01 \\
-\hline 
-CMD & 13.47 & 0.09 & 10.55 & 0.05 \\
-\hline 
-CBL & 11.88 & 0.05 & 13.11 & 0.04\\ 
-\hline 
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{A nice looking table}
-\centering
-\label{table:nice_table}
-\begin{tabular}{l c c c c}
-\hline 
-\multirow{2}{*}{Dental measurement} & \multicolumn{2}{c}{Species I} & \multicolumn{2}{c}{Species II} \\ 
-\cline{2-5}
-  & mean & SD  & mean & SD  \\ 
-\hline
-I1MD & 6.23 & 0.91 & 5.2  & 0.7  \\
-
-I1LL & 7.48 & 0.56 & 8.7  & 0.71 \\
-
-I2MD & 3.99 & 0.63 & 4.22 & 0.54 \\
-
-I2LL & 6.81 & 0.02 & 6.66 & 0.01 \\
-
-CMD & 13.47 & 0.09 & 10.55 & 0.05 \\
-
-CBL & 11.88 & 0.05 & 13.11 & 0.04\\ 
-\hline 
-\end{tabular}
-\end{table}
-
-\begin{table}
-\caption{Even better looking table using booktabs}
-\centering
-\label{table:good_table}
-\begin{tabular}{l c c c c}
-\toprule
-\multirow{2}{*}{Dental measurement} & \multicolumn{2}{c}{Species I} & \multicolumn{2}{c}{Species II} \\ 
-\cmidrule{2-5}
-  & mean & SD  & mean & SD  \\ 
-\midrule
-I1MD & 6.23 & 0.91 & 5.2  & 0.7  \\
-
-I1LL & 7.48 & 0.56 & 8.7  & 0.71 \\
-
-I2MD & 3.99 & 0.63 & 4.22 & 0.54 \\
-
-I2LL & 6.81 & 0.02 & 6.66 & 0.01 \\
-
-CMD & 13.47 & 0.09 & 10.55 & 0.05 \\
-
-CBL & 11.88 & 0.05 & 13.11 & 0.04\\ 
-\bottomrule
-\end{tabular}
-\end{table}

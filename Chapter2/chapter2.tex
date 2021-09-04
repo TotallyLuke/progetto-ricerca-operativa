@@ -12,17 +12,17 @@
     \graphicspath{{Chapter2/Figs/Vector/}{Chapter2/Figs/}}
 \fi
 \section{Descrizione del problema}
-Il Comune di Nuova Albalonga deve pianificare il trasporto studenti da e verso l'unico Istituto Comprensivo nel territorio comunale per il secondo semestre dell'anno 2021.
+Il Comune fittizio di Nuova Albalonga deve pianificare il trasporto studenti da e verso l'unico Istituto Comprensivo nel territorio comunale per il secondo semestre dell'anno 2021.
 
-Il comune è proprietario di 2 scuolabus, aventi una capacità di 18 posti a sedere il primo e di 26 posti a sedere il secondo. In ottemperanza con la normativa relativa all'emergenza sanitaria in corso la capienza fruibile è ridotta al 50\%, dunque rimangono a disposizione due bus da 9 e 13 posti per gli studenti.
+Il comune è proprietario di 2 scuolabus, aventi una capacità di 18 posti a sedere i primi due e di 26 posti a sedere il terzo. In ottemperanza con la normativa relativa all'emergenza sanitaria in corso la capienza fruibile è ridotta al 50\%, dunque rimangono a disposizione tre bus da 9, 9 e 13 posti per gli studenti.
 
-Ogni scuolabus comincia la propria corsa nel proprio deposito. Sono presenti due depositi, per i quali il comune versa un canone di locazione per lo stazionamento notturno dello scuolabus e una quota aggiuntiva per l'eventuale stazionamento diurno (nel caso lo scuolabus non venga utilizzato).
+Ogni scuolabus comincia la propria corsa nel proprio deposito. Sono presenti due depositi, per i quali il comune versa un canone di locazione per lo stazionamento notturno dello scuolabus e una quota aggiuntiva per l'eventuale stazionamento diurno (nel caso lo scuolabus non venga utilizzato). I bus da 18 posti partono dallo stesso deposito, il bus da 26 posti parte da un diverso deposito.
 
 Ogni scuolabus termina la propria corsa nella fermata antistante la scuola, nella quale gli scuolabus stazionano nel tempo compreso tra la corsa di andata e la corsa di ritorno. L'utilizzo di tale fermata non comporta spese aggiuntive. Una volta raggiunta tale fermata il bus non può più prelevare studenti. \footnote{Vincolo necessario affinché il numero di studenti saliti in un bus corrisponda all'occupazione massima registrata.}
 
-Il comune ha selezionato 4 punti di raccolta in cui poter prelevare studenti. Ogni studente afferente al servizio scuolabus compila un questionario nel quale seleziona uno o più punti di raccolta in cui è disposto a prendere l'autobus. Uno studente può essere prelevato solo in questi punti di raccolta: non in un deposito, né nella fermata antistate la scuola. Un bus può visitare una fermata se è possibile prelevare almeno due studenti in essa.
+Il comune ha selezionato 5 punti di raccolta in cui poter prelevare studenti. Ogni studente afferente al servizio scuolabus compila un questionario nel quale seleziona uno o più punti di raccolta in cui è disposto a prendere l'autobus. Uno studente può essere prelevato solo in questi punti di raccolta: non in un deposito, né nella fermata antistate la scuola. Un bus può visitare una fermata se è possibile prelevare almeno due studenti in essa.
 
-È dato il grafo completo dei tempi di percorrenza tra le fermate dei bus, e un grafo delle distanze tra le varie locazioni.
+Nel file \textit{.dat} è dato il grafo completo dei tempi di percorrenza tra le fermate dei bus e un grafo delle distanze tra le varie locazioni, così come la matrice delle preferenze studenti-fermate.
 
  Si vuole decidere quali bus utilizzare, quali fermate far visitare ad ogni bus e come assegnare gli studenti alle fermate, minimizzando il costo del servizio stanti:
 
@@ -31,9 +31,8 @@ Il comune ha selezionato 4 punti di raccolta in cui poter prelevare studenti. Og
  \item dei costi fissi per bus utilizzato di €3200 a semestre di assicurazione e bollo, e di €15 euro al giorno per l'utilizzo del deposito per bus utilizzato;
  \item dei costi fissi di €25 al giorno per bus non utilizzato (il non utilizzo del bus implica spese aggiuntive per il deposito).
 \end{itemize}
- Una norma comunale impedisce ai bus di prelevare gli studenti prima delle ore 7:00. Ogni bus deve terminare la corsa prima dell'inizio dell'orario scolastico, fissato per le ore 7:50. Nel calcolo del tempo impiegato vanno considerati, oltre ai tempi indicati nel grafo di %TODO FIGURA
-anche 2 minuti aggiuntivi ritenuti necessari ad ogni fermata per far salire gli studenti (e per assorbire eventuali ritardi di entità lieve).
+ Una norma comunale impedisce ai bus di prelevare gli studenti prima delle ore 7:00. Ogni bus deve terminare la corsa prima dell'inizio dell'orario scolastico, fissato per le ore 7:50. Nel calcolo del tempo impiegato vanno considerati, oltre ai tempi indicati nel grafo delle distanze, anche 2 minuti aggiuntivi ritenuti necessari ad ogni fermata per far salire gli studenti (e per assorbire eventuali ritardi di entità lieve).
 
 %Si considera il percorso di andata: il percorso di ritorno visita tutte le fermate individuate da quello di andata, in  ordine contrario.
 \section{Note aggiuntive}
- Si vuole verificare se una variazione dell'orario previsto per la campanella può comportare una riduzione di costi, considerando che l'orario delle lezioni può cominciare in un orario con cifra dei minuti multiplo di 5 (es. 7:45, 7:50, 7:55) e in un lasso di tempo comreso tra le 7:30 e le 8:45.
+ Si vuole verificare se una variazione dell'orario previsto per la campanella può comportare una riduzione di costi, considerando che tale orario deve avere cifra dei minuti multiplo di 5 (es. 7:45, 7:50, 7:55) e deve essere compreso in un lasso di tempo compreso tra le 7:30 e le 8:45.
