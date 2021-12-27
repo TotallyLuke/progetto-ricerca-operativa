@@ -1,0 +1,4 @@
+solve;
+display costs;
+display t;
+let t := t+1;

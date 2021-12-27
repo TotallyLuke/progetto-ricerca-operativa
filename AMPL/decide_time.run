@@ -1,0 +1,8 @@
+reset;
+
+model bus_model.mod; # carica il modello
+data bus_dat.dat; # carica i dati
+option solver cplex;
+
+let t := 6;
+for {1..16} commands timeChange.sa1;

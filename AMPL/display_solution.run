@@ -1,0 +1,12 @@
+reset;
+
+model bus_model.mod; # carica il modello
+data bus_dat.dat; # carica i dati
+option solver cplex;
+let t := 10;
+
+solve;
+
+display x;
+display y;
+display z;

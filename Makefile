@@ -1,6 +1,6 @@
-OBJS	= thesis
+OBJS	= relazione
 
-default: refresh
+default: full
 
 clean:
 	rm -f *.aux $(OBJS).pdf $(OBJS).ext *.idx *.ilg *.ind *.log *.lot *.lof *.tmp *.out *.glo *.gls *.fls *.fdb* *.toc *.xtr
@@ -11,7 +11,7 @@ refresh:
 	pdflatex $(OBJS)
 
 full:
-	latexmk -pdf $(OBJS); cp ./thesis.pdf /home/lucav/Documents/RO/single-school-bus-routing-main/veronese_luca_1187571_progetto_bus/relazione.pdf
+	latexmk -pdf $(OBJS)
 
 
 force:
